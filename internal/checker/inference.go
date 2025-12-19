@@ -348,10 +348,10 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 	saveExpandingFlags := n.expandingFlags
 	n.sourceStack = append(n.sourceStack, source)
 	n.targetStack = append(n.targetStack, target)
-	if c.isDeeplyNestedType(source, n.sourceStack, 2) {
+	if c.isDeeplyNestedType(source, n.sourceStack, 200) {
 		n.expandingFlags |= ExpandingFlagsSource
 	}
-	if c.isDeeplyNestedType(target, n.targetStack, 2) {
+	if c.isDeeplyNestedType(target, n.targetStack, 200) {
 		n.expandingFlags |= ExpandingFlagsTarget
 	}
 	if n.expandingFlags != ExpandingFlagsBoth {
@@ -1002,10 +1002,10 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 	c.reverseMappedSourceStack = append(c.reverseMappedSourceStack, source)
 	c.reverseMappedTargetStack = append(c.reverseMappedTargetStack, target)
 	saveExpandingFlags := c.reverseExpandingFlags
-	if c.isDeeplyNestedType(source, c.reverseMappedSourceStack, 2) {
+	if c.isDeeplyNestedType(source, c.reverseMappedSourceStack, 200) {
 		c.reverseExpandingFlags |= ExpandingFlagsSource
 	}
-	if c.isDeeplyNestedType(target, c.reverseMappedTargetStack, 2) {
+	if c.isDeeplyNestedType(target, c.reverseMappedTargetStack, 200) {
 		c.reverseExpandingFlags |= ExpandingFlagsTarget
 	}
 	var t *Type
