@@ -3061,13 +3061,13 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	saveExpandingFlags := r.expandingFlags
 	if recursionFlags&RecursionFlagsSource != 0 {
 		r.sourceStack = append(r.sourceStack, source)
-		if r.expandingFlags&ExpandingFlagsSource == 0 && r.c.isDeeplyNestedType(source, r.sourceStack, 3) {
+		if r.expandingFlags&ExpandingFlagsSource == 0 && r.c.isDeeplyNestedType(source, r.sourceStack, 300) {
 			r.expandingFlags |= ExpandingFlagsSource
 		}
 	}
 	if recursionFlags&RecursionFlagsTarget != 0 {
 		r.targetStack = append(r.targetStack, target)
-		if r.expandingFlags&ExpandingFlagsTarget == 0 && r.c.isDeeplyNestedType(target, r.targetStack, 3) {
+		if r.expandingFlags&ExpandingFlagsTarget == 0 && r.c.isDeeplyNestedType(target, r.targetStack, 300) {
 			r.expandingFlags |= ExpandingFlagsTarget
 		}
 	}
@@ -3483,9 +3483,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case target.flags&TypeFlagsConditional != 0:
-		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
+		// If we reach 1000 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
 		// conditional type and bail out with a Ternary.Maybe result.
-		if r.c.isDeeplyNestedType(target, r.targetStack, 10) {
+		if r.c.isDeeplyNestedType(target, r.targetStack, 1000) {
 			return TernaryMaybe
 		}
 		c := target.AsConditionalType()
@@ -3664,9 +3664,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case source.flags&TypeFlagsConditional != 0:
-		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
+		// If we reach 1000 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
 		// conditional type and bail out with a Ternary.Maybe result.
-		if r.c.isDeeplyNestedType(source, r.sourceStack, 10) {
+		if r.c.isDeeplyNestedType(source, r.sourceStack, 1000) {
 			return TernaryMaybe
 		}
 		if target.flags&TypeFlagsConditional != 0 {
